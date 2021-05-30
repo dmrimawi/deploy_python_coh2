@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section1 Welcome Page</title>
+    <style>
+        #logout_url{
+            float: right;
+        }
+        #Welcome_head {
+            float: left;
+        }
+        .clear_fix{
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 id="Welcome_head">Welcome {{request.session.first_name}} {{request.session.last_name}}!</h1>
+        <a id="logout_url" href="/logout">Logout</a>
+    </div>
+    <div class="clear_fix"></div>
+    <hr>
+    <h1>Add a favourite book</h1>
+    <form action="/add_book" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Book Title"> <br>
+        <input type="text" name="description" placeholder="Description"> <br>
+        <input type="submit" value="Add Book"> <br>
+    </form>
+
+    {% for book in all_books %}
+        <a href="/books/{{book.id}}">{{book.title}}</a>
+        <br>
+        <p>Add by {{book.uploaded_by_id.first_name}} {{book.uploaded_by_id.last_name}}</p>
+        {% if book in fav_books %}
+            <p> This is one of your favourate </p>
+        {% else %}
+            <a href="/add_fav/{{book.id}}">Add to favourite</a>
+        {% endif %}
+        <br><br>
+    {%endfor%}
+
+</body>
+</html>
